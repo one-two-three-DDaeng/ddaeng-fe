@@ -1,0 +1,173 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:one_two_three_ddaeng_fe/presentaion/movie_quotes_blank_rotate_game/movie_quotes_blank_rotate_game_view_model.dart';
+import 'package:one_two_three_ddaeng_fe/presentaion/widget/progress_widget.dart';
+import 'package:one_two_three_ddaeng_fe/utils/custom_color.dart';
+import 'package:one_two_three_ddaeng_fe/utils/custom_text.dart';
+import 'package:provider/provider.dart';
+
+class MovieQuotesBlankRotateGameView extends StatelessWidget {
+  const MovieQuotesBlankRotateGameView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<MovieQuotesBlankRotateGameViewModel>();
+
+    return WillPopScope(
+      onWillPop: () => viewModel.clickBack(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            '하나둘셋 땡!',
+            style: customTextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.white,
+        ),
+        body: viewModel.step == 1
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 12.h),
+                    child: Text(
+                      '문제 갯수를 설정해주세요',
+                      style: customTextStyle(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: viewModel.clickMinus,
+                        child: Icon(
+                          CupertinoIcons.minus,
+                          size: 60.w,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      SizedBox(
+                        width: 120.w,
+                        child: Text(
+                          viewModel.quizCount.toString(),
+                          style: customTextStyle(
+                            fontSize: 100,
+                            fontWeight: FontWeight.w900,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      GestureDetector(
+                        onTap: viewModel.clickPlus,
+                        child: Icon(
+                          CupertinoIcons.plus,
+                          size: 60.w,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 24.w,
+                      right: 24.w,
+                      bottom: 36.h,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () => viewModel.clickStart(context),
+                      child: const Text(
+                        '시작하기',
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : viewModel.isProgress
+                ? progressWidget()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: Text(
+                          '남은 문제 개수: ${viewModel.leftQuiz}개',
+                          style: customTextStyle(),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: Text(
+                          '열 수 있는 칸: ${viewModel.maxOpenCount - viewModel.openIndex.length}칸',
+                          style: customTextStyle(),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                          ),
+                          child: Center(
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              runSpacing: 10.w,
+                              spacing: 10.h,
+                              alignment: WrapAlignment.center,
+                              children: [
+                                ...List.generate(
+                                  viewModel.quiz.length,
+                                  (index) => GestureDetector(
+                                    onTap: () => viewModel.clickBox(index),
+                                    child: Container(
+                                      width: 36.w,
+                                      height: 36.w,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 2,
+                                          color: Colors.black,
+                                        ),
+                                        color: index % 2 == 1 ? CustomColor.backgroundColor : Colors.white,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        viewModel.openIndex.contains(index) ? viewModel.quiz[index] : '',
+                                        style: customTextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(20.w),
+                        child: ElevatedButton(
+                          onPressed: () => viewModel.clickViewAnswer(context),
+                          child: const Text('정답보기'),
+                        ),
+                      ),
+                    ],
+                  ),
+      ),
+    );
+  }
+}

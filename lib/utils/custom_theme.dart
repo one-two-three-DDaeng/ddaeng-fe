@@ -26,8 +26,8 @@ ThemeData customTheme(BuildContext context) {
           right: 6.w,
         ),
         textStyle: customTextStyle(
-          fontSize: 14,
-          color: CustomColor.blackColor,
+          fontSize: 16,
+          color: Colors.white,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.w),
