@@ -1,6 +1,6 @@
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/movie_quotes_blank_rotate_game/movie_quotes_blank_rotate_game_view_model.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/widget/progress_widget.dart';
 import 'package:one_two_three_ddaeng_fe/utils/custom_color.dart';
@@ -35,7 +35,7 @@ class MovieQuotesBlankRotateGameView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 12.h),
+                    padding: const EdgeInsets.only(top: 12),
                     child: Text(
                       '문제 갯수를 설정해주세요',
                       style: customTextStyle(),
@@ -47,16 +47,16 @@ class MovieQuotesBlankRotateGameView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: viewModel.clickMinus,
-                        child: Icon(
+                        child: const Icon(
                           CupertinoIcons.minus,
-                          size: 60.w,
+                          size: 60,
                         ),
                       ),
-                      SizedBox(
-                        width: 20.w,
+                      const SizedBox(
+                        width: 20,
                       ),
                       SizedBox(
-                        width: 120.w,
+                        width: 120,
                         child: Text(
                           viewModel.quizCount.toString(),
                           style: customTextStyle(
@@ -66,23 +66,23 @@ class MovieQuotesBlankRotateGameView extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(
-                        width: 20.w,
+                      const SizedBox(
+                        width: 20,
                       ),
                       GestureDetector(
-                        onTap: viewModel.clickPlus,
-                        child: Icon(
+                        onTap: () => viewModel.clickPlus(context),
+                        child: const Icon(
                           CupertinoIcons.plus,
-                          size: 60.w,
+                          size: 60,
                         ),
                       ),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                      left: 24.w,
-                      right: 24.w,
-                      bottom: 36.h,
+                    padding: const EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      bottom: 36,
                     ),
                     child: ElevatedButton(
                       onPressed: () => viewModel.clickStart(context),
@@ -98,56 +98,86 @@ class MovieQuotesBlankRotateGameView extends StatelessWidget {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(
-                        height: 20.h,
+                      const SizedBox(
+                        height: 20,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: Text(
-                          '남은 문제 개수: ${viewModel.leftQuiz}개',
-                          style: customTextStyle(),
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: Text(
-                          '열 수 있는 칸: ${viewModel.maxOpenCount - viewModel.openIndex.length}칸',
-                          style: customTextStyle(),
-                          textAlign: TextAlign.end,
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '남은 문제 개수: ${viewModel.leftQuiz}개',
+                              style: customTextStyle(),
+                              textAlign: TextAlign.end,
+                            ),
+                            Text(
+                              '열 수 있는 칸: ${viewModel.maxOpenCount - viewModel.openIndex.length}칸',
+                              style: customTextStyle(),
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
                           ),
                           child: Center(
                             child: Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
-                              runSpacing: 10.w,
-                              spacing: 10.h,
+                              runSpacing: 4,
+                              spacing: 4,
                               alignment: WrapAlignment.center,
                               children: [
                                 ...List.generate(
                                   viewModel.quiz.length,
                                   (index) => GestureDetector(
-                                    onTap: () => viewModel.clickBox(index),
-                                    child: Container(
-                                      width: 36.w,
-                                      height: 36.w,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 2,
-                                          color: Colors.black,
+                                    onTap: () {},
+                                    child: FlipCard(
+                                      side: CardSide.BACK,
+                                      flipOnTouch: viewModel.openIndex.contains(index) ||
+                                              viewModel.openIndex.length >= viewModel.maxOpenCount ||
+                                              viewModel.disableClickIndex.contains(index)
+                                          ? false
+                                          : true,
+                                      onFlip: () => viewModel.clickBox(index),
+                                      direction: FlipDirection.HORIZONTAL,
+                                      front: Container(
+                                        width: 36,
+                                        height: 36,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 2,
+                                            color: Colors.black,
+                                          ),
+                                          color: viewModel.disableClickIndex.contains(index) ? CustomColor.backgroundColor : Colors.white,
                                         ),
-                                        color: index % 2 == 1 ? CustomColor.backgroundColor : Colors.white,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          viewModel.quiz[index],
+                                          style: customTextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
                                       ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        viewModel.openIndex.contains(index) ? viewModel.quiz[index] : '',
-                                        style: customTextStyle(
-                                          fontSize: 20,
+                                      back: Container(
+                                        width: 36,
+                                        height: 36,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 2,
+                                            color: Colors.black,
+                                          ),
+                                          color: viewModel.disableClickIndex.contains(index) ? CustomColor.backgroundColor : Colors.white,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '',
+                                          style: customTextStyle(
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -159,7 +189,7 @@ class MovieQuotesBlankRotateGameView extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(20.w),
+                        padding: const EdgeInsets.all(20),
                         child: ElevatedButton(
                           onPressed: () => viewModel.clickViewAnswer(context),
                           child: const Text('정답보기'),

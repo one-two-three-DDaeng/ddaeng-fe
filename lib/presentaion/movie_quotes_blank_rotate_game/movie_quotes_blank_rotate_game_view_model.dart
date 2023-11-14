@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:one_two_three_ddaeng_fe/domain/model/count_model.dart';
 import 'package:one_two_three_ddaeng_fe/domain/model/movie_line_model.dart';
+import 'package:one_two_three_ddaeng_fe/presentaion/dialog/title_content_one_button_dialog.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/dialog/title_content_two_button_dialog.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/movie_quotes_blank_game_result/movie_quotes_blank_game_result_view.dart';
 
@@ -16,9 +17,6 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
   int _quizCount = 5;
   int get quizCount => _quizCount;
 
-  int _leftTime = 0;
-  int get leftTime => _leftTime;
-
   int get leftQuiz => _quizCount - _oCount - _xCount;
 
   int _oCount = 0;
@@ -27,11 +25,16 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
   int _maxOpenCount = 0;
   int get maxOpenCount => _maxOpenCount;
 
-  List<String> _quiz = [];
+  final List<String> _quiz = [];
   List<String> get quiz => _quiz;
 
-  List<int> _openIndex = [];
+  final List<int> _openIndex = [];
   List<int> get openIndex => _openIndex;
+
+  final List<int> _disableClickIndex = [];
+  List<int> get disableClickIndex => _disableClickIndex;
+
+  final List<int> _alreadyQuiz = [];
 
   String _movieName = '';
   String get movieName => _movieName;
@@ -54,11 +57,22 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
   }
 
   void clickMinus() {
+    if (_quizCount == 1) {
+      return;
+    }
     _quizCount--;
     notifyListeners();
   }
 
-  void clickPlus() {
+  void clickPlus(BuildContext context) async {
+    if (_quizCount == 10) {
+      await titleContentOneButtonDialog(
+        context: context,
+        content: '문제 개수는 최대 10개입니다',
+        buttonText: '확인',
+      );
+      return;
+    }
     _quizCount++;
     notifyListeners();
   }
@@ -74,7 +88,7 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
     _movieName = '';
     _quiz.clear();
     _openIndex.clear();
-    _leftTime = 30;
+    _disableClickIndex.clear();
 
     var result = await getMovieCount();
 
@@ -86,6 +100,14 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
 
     var movieModel = MovieLineModel.fromJson(jsonDecode(result2));
 
+    if (_alreadyQuiz.contains(movieModel.data[0].lineSeq)) {
+      if (context.mounted) {
+        getMovie(context);
+      }
+    } else {
+      _alreadyQuiz.add(movieModel.data[0].lineSeq);
+    }
+
     _movieName = movieModel.data[0].movieName;
     _quiz.addAll(movieModel.data[0].line.split(''));
 
@@ -96,10 +118,19 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
   }
 
   void clickBox(int index) {
-    if (_openIndex.contains(index) || _openIndex.length >= _maxOpenCount || index % 2 == 1) {
+    if (_openIndex.contains(index) || _openIndex.length >= _maxOpenCount) {
       return;
     } else {
       _openIndex.add(index);
+
+      if (index == 0) {
+        _disableClickIndex.add(index + 1);
+      } else if (index == _quiz.length - 1) {
+        disableClickIndex.add(index - 1);
+      } else {
+        disableClickIndex.add(index - 1);
+        _disableClickIndex.add(index + 1);
+      }
       notifyListeners();
     }
   }

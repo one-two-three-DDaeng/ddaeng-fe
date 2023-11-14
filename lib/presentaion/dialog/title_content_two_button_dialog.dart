@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:one_two_three_ddaeng_fe/utils/custom_color.dart';
 import 'package:one_two_three_ddaeng_fe/utils/custom_text.dart';
 
@@ -14,28 +13,28 @@ Future<dynamic> titleContentTwoButtonDialog({
       barrierDismissible: true,
       builder: ((context) {
         return SimpleDialog(
-          contentPadding: EdgeInsets.only(left: 30.w, right: 30.w, top: 50.h, bottom: 20.h),
+          contentPadding: const EdgeInsets.only(left: 30, right: 30, top: 50, bottom: 20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.w),
+            borderRadius: BorderRadius.circular(10),
           ),
           children: [
             SizedBox(
-              width: 320.w,
+              width: 320,
               child: Text(
                 content,
                 style: customTextStyle(),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(
-              height: 30.w,
+            const SizedBox(
+              height: 30,
             ),
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      fixedSize: Size.fromHeight(50.h),
+                      fixedSize: const Size.fromHeight(50),
                       backgroundColor: CustomColor.orangeColor,
                     ),
                     onPressed: () => Navigator.of(context).pop(false),
@@ -44,12 +43,14 @@ Future<dynamic> titleContentTwoButtonDialog({
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 20.w,
+                const SizedBox(
+                  width: 20,
                 ),
                 Expanded(
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(fixedSize: Size.fromHeight(50.h)),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size.fromHeight(50),
+                    ),
                     onPressed: () => Navigator.of(context).pop(true),
                     child: Text(
                       buttonText2,

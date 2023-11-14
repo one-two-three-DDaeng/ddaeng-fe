@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/movie_quotes_blank_timer_game/movie_quotes_blank_timer_game_view_model.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/widget/progress_widget.dart';
 import 'package:one_two_three_ddaeng_fe/utils/custom_color.dart';
@@ -35,6 +34,7 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     final viewModel = context.watch<MovieQuotesBlankTimerGameViewModel>();
 
     return WillPopScope(
@@ -58,7 +58,7 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 12.h),
+                    padding: const EdgeInsets.only(top: 12),
                     child: Text(
                       '문제 갯수를 설정해주세요',
                       style: customTextStyle(),
@@ -70,16 +70,16 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                     children: [
                       GestureDetector(
                         onTap: viewModel.clickMinus,
-                        child: Icon(
+                        child: const Icon(
                           CupertinoIcons.minus,
-                          size: 60.w,
+                          size: 60,
                         ),
                       ),
-                      SizedBox(
-                        width: 20.w,
+                      const SizedBox(
+                        width: 20,
                       ),
                       SizedBox(
-                        width: 120.w,
+                        width: 120,
                         child: Text(
                           viewModel.quizCount.toString(),
                           style: customTextStyle(
@@ -89,23 +89,23 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(
-                        width: 20.w,
+                      const SizedBox(
+                        width: 20,
                       ),
                       GestureDetector(
-                        onTap: viewModel.clickPlus,
-                        child: Icon(
+                        onTap: () => viewModel.clickPlus(context),
+                        child: const Icon(
                           CupertinoIcons.plus,
-                          size: 60.w,
+                          size: 60,
                         ),
                       ),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                      left: 24.w,
-                      right: 24.w,
-                      bottom: 36.h,
+                    padding: const EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      bottom: 36,
                     ),
                     child: ElevatedButton(
                       onPressed: () => viewModel.clickStart(context),
@@ -124,12 +124,12 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                       Stack(
                         children: [
                           Positioned(
-                            left: 170.w,
-                            right: 170.w,
+                            left: 170,
+                            right: 170,
                             child: Container(
                               alignment: Alignment.center,
-                              width: 10.w,
-                              height: 50.h,
+                              width: 10,
+                              height: 30,
                               child: Text(
                                 viewModel.leftTime.toString(),
                                 textAlign: TextAlign.center,
@@ -139,25 +139,25 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                           Row(
                             children: [
                               Container(
-                                width: viewModel.leftTime / 30 * 360.w,
-                                height: 50.h,
+                                width: viewModel.leftTime / 30 * width,
+                                height: 30,
                                 decoration: BoxDecoration(
                                   color: CustomColor.redColor.withOpacity(.3),
                                 ),
                               ),
-                              Container(
-                                width: 360.w - viewModel.leftTime / 30 * 360.w,
-                                height: 50.h,
+                              SizedBox(
+                                width: 360 - viewModel.leftTime / 30 * 360,
+                                height: 30,
                               ),
                             ],
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 20.h,
+                      const SizedBox(
+                        height: 10,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(right: 20.w),
+                        padding: const EdgeInsets.only(right: 20),
                         child: Text(
                           '남은 문제 개수: ${viewModel.leftQuiz}',
                           style: customTextStyle(),
@@ -166,8 +166,8 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                       ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -215,8 +215,8 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                               // ),
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
-                                runSpacing: 4.w,
-                                spacing: 4.w,
+                                runSpacing: 4,
+                                spacing: 4,
                                 alignment: WrapAlignment.center,
                                 children: [
                                   ...List.generate(
@@ -224,17 +224,18 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                                     (index) => viewModel.quiz[index] == '!' ||
                                             viewModel.quiz[index] == ',' ||
                                             viewModel.quiz[index] == '?' ||
-                                            viewModel.quiz[index] == '√'
+                                            viewModel.quiz[index] == '√' ||
+                                            viewModel.quiz[index] == '.'
                                         ? Text(
                                             viewModel.quiz[index] == '√' ? '  ' : viewModel.quiz[index],
                                             style: customTextStyle(
-                                              fontSize: 20,
+                                              fontSize: 24,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           )
                                         : Container(
-                                            width: 36.w,
-                                            height: 36.w,
+                                            width: 36,
+                                            height: 36,
                                             decoration: const BoxDecoration(
                                               border: Border(
                                                 bottom: BorderSide(
@@ -247,7 +248,7 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                                             child: Text(
                                               viewModel.hintIndex.contains(index) ? viewModel.quiz[index] : '',
                                               style: customTextStyle(
-                                                fontSize: 20,
+                                                fontSize: 24,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -255,8 +256,8 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                                   )
                                 ],
                               ),
-                              SizedBox(
-                                height: 20.h,
+                              const SizedBox(
+                                height: 20,
                               ),
                               viewModel.leftTime <= 10
                                   ? Center(
@@ -274,9 +275,9 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(20.w),
+                        padding: const EdgeInsets.all(20),
                         child: ElevatedButton(
-                          onPressed: () => viewModel.clickViewAnswer(context, false),
+                          onPressed: () => viewModel.clickViewAnswer(context),
                           child: const Text('정답보기'),
                         ),
                       ),

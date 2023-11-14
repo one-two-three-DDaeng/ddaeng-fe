@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/movie_quotes_blank_rotate_game/movie_quotes_blank_rotate_game_view.dart';
@@ -37,8 +35,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 10.h,
+          const SizedBox(
+            height: 10,
           ),
           Text(
             '결과 확인',
@@ -63,8 +61,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                     '총점',
                     style: customTextStyle(),
                   ),
-                  SizedBox(
-                    height: 10.h,
+                  const SizedBox(
+                    height: 10,
                   ),
                   Text(
                     '${(oCount / (oCount + xCount) * 100).round()}점',
@@ -72,8 +70,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                width: 50.w,
+              const SizedBox(
+                width: 50,
               ),
               Column(
                 children: [
@@ -81,8 +79,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                     '맞은 개수',
                     style: customTextStyle(),
                   ),
-                  SizedBox(
-                    height: 10.h,
+                  const SizedBox(
+                    height: 10,
                   ),
                   Text(
                     '$oCount개',
@@ -90,8 +88,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                width: 50.w,
+              const SizedBox(
+                width: 50,
               ),
               Column(
                 children: [
@@ -99,8 +97,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                     '틀린 개수',
                     style: customTextStyle(),
                   ),
-                  SizedBox(
-                    height: 10.h,
+                  const SizedBox(
+                    height: 10,
                   ),
                   Text(
                     '$xCount개',
@@ -110,11 +108,11 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: 50.h,
+          const SizedBox(
+            height: 50,
           ),
           Padding(
-            padding: EdgeInsets.all(24.w),
+            padding: const EdgeInsets.all(24),
             child: Row(
               children: [
                 Expanded(
@@ -150,8 +148,8 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(
-                  width: 24.w,
+                const SizedBox(
+                  width: 24,
                 ),
                 Expanded(
                   child: ElevatedButton(

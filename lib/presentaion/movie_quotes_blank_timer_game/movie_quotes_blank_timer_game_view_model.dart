@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:one_two_three_ddaeng_fe/domain/model/count_model.dart';
 import 'package:one_two_three_ddaeng_fe/domain/model/movie_line_model.dart';
+import 'package:one_two_three_ddaeng_fe/presentaion/dialog/title_content_one_button_dialog.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/dialog/title_content_two_button_dialog.dart';
 import 'package:one_two_three_ddaeng_fe/presentaion/movie_quotes_blank_game_result/movie_quotes_blank_game_result_view.dart';
-import 'package:provider/provider.dart';
 
 class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
   int _step = 1;
@@ -25,14 +25,16 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
   int _oCount = 0;
   int _xCount = 0;
 
-  List<String> _quiz = [];
+  final List<String> _quiz = [];
   List<String> get quiz => _quiz;
 
-  List<int> _hintIndex = [];
+  final List<int> _hintIndex = [];
   List<int> get hintIndex => _hintIndex;
 
-  List<int> _randomIndex = [];
+  final List<int> _randomIndex = [];
   List<int> get randomIndex => _randomIndex;
+
+  final List<int> _alreadyQuiz = [];
 
   String _movieName = '';
   String get movieName => _movieName;
@@ -46,7 +48,12 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
     if (step == 1) {
       return true;
     } else {
-      var result = await titleContentTwoButtonDialog(context: context, content: '정말로 게임에서 나가시겠습니까?', buttonText1: '취소', buttonText2: '확인');
+      var result = await titleContentTwoButtonDialog(
+        context: context,
+        content: '정말로 게임에서 나가시겠습니까?',
+        buttonText1: '취소',
+        buttonText2: '확인',
+      );
       if (result != null) {
         if (result) {
           if (_isProgress = false) {
@@ -60,11 +67,22 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
   }
 
   void clickMinus() {
+    if (_quizCount == 1) {
+      return;
+    }
     _quizCount--;
     notifyListeners();
   }
 
-  void clickPlus() {
+  void clickPlus(BuildContext context) async {
+    if (_quizCount == 10) {
+      await titleContentOneButtonDialog(
+        context: context,
+        content: '문제 개수는 최대 10개입니다',
+        buttonText: '확인',
+      );
+      return;
+    }
     _quizCount++;
     notifyListeners();
   }
@@ -89,6 +107,15 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
 
     int number = Random().nextInt(countModel.data[0].count);
 
+    if (_alreadyQuiz.contains(number)) {
+      if (context.mounted) {
+        getMovie(context);
+        return;
+      }
+    } else {
+      _alreadyQuiz.add(number);
+    }
+
     var result2 = await getMovieLineContent(number.toString());
 
     var movieModel = MovieLineModel.fromJson(jsonDecode(result2));
@@ -97,7 +124,7 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
     _quiz.addAll(movieModel.data[0].line.split(''));
 
     for (int i = 0; i < _quiz.length; i++) {
-      if (_quiz[i] != '!' && _quiz[i] != ',' && _quiz[i] != '?' && _quiz[i] != '√') {
+      if (_quiz[i] != '!' && _quiz[i] != ',' && _quiz[i] != '?' && _quiz[i] != '√' && _quiz[i] != '.') {
         _randomIndex.add(i);
       }
     }
@@ -126,12 +153,12 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
         }
         notifyListeners();
       } else {
-        clickViewAnswer(context, true);
+        clickViewAnswer(context);
       }
     });
   }
 
-  void clickViewAnswer(BuildContext context, bool timeOver) async {
+  void clickViewAnswer(BuildContext context) async {
     timer?.cancel();
     String answer = '';
 
@@ -145,17 +172,22 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
       buttonText1: '오답',
       buttonText2: '정답',
     );
-    if (!timeOver && result == null) {
-      if (context.mounted) {
-        startTimer(context);
+    if (result == null) {
+      if (_leftTime == 0) {
+        return;
+      } else {
+        if (context.mounted) {
+          startTimer(context);
+        }
       }
+
       return;
     }
 
-    if (result == null || !result) {
-      _xCount++;
-    } else {
+    if (result) {
       _oCount++;
+    } else {
+      _xCount++;
     }
     if (leftQuiz != 0) {
       if (context.mounted) {
