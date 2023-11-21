@@ -108,6 +108,9 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                       bottom: 36,
                     ),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size.fromHeight(50),
+                      ),
                       onPressed: () => viewModel.clickStart(context),
                       child: const Text(
                         '시작하기',
@@ -277,6 +280,9 @@ class _MovieQuotesBlankTimerGameViewState extends State<MovieQuotesBlankTimerGam
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size.fromHeight(50),
+                          ),
                           onPressed: () => viewModel.clickViewAnswer(context),
                           child: const Text('정답보기'),
                         ),

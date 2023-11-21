@@ -172,6 +172,7 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
       buttonText1: '오답',
       buttonText2: '정답',
     );
+
     if (result == null) {
       if (_leftTime == 0) {
         return;
@@ -180,22 +181,20 @@ class MovieQuotesBlankTimerGameViewModel extends ChangeNotifier {
           startTimer(context);
         }
       }
-
-      return;
-    }
-
-    if (result) {
-      _oCount++;
     } else {
-      _xCount++;
-    }
-    if (leftQuiz != 0) {
-      if (context.mounted) {
-        getMovie(context);
+      if (result) {
+        _oCount++;
+      } else {
+        _xCount++;
       }
-    } else {
-      if (context.mounted) {
-        goResultPage(context);
+      if (leftQuiz != 0) {
+        if (context.mounted) {
+          getMovie(context);
+        }
+      } else {
+        if (context.mounted) {
+          goResultPage(context);
+        }
       }
     }
   }

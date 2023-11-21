@@ -96,17 +96,18 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
 
     int number = Random().nextInt(countModel.data[0].count);
 
+    if (_alreadyQuiz.contains(number)) {
+      if (context.mounted) {
+        getMovie(context);
+        return;
+      }
+    } else {
+      _alreadyQuiz.add(number);
+    }
+
     var result2 = await getMovieLineContent(number.toString());
 
     var movieModel = MovieLineModel.fromJson(jsonDecode(result2));
-
-    if (_alreadyQuiz.contains(movieModel.data[0].lineSeq)) {
-      if (context.mounted) {
-        getMovie(context);
-      }
-    } else {
-      _alreadyQuiz.add(movieModel.data[0].lineSeq);
-    }
 
     _movieName = movieModel.data[0].movieName;
     _quiz.addAll(movieModel.data[0].line.split(''));
@@ -149,7 +150,11 @@ class MovieQuotesBlankRotateGameViewModel extends ChangeNotifier {
       buttonText2: '정답',
     );
 
-    if (result == null || !result) {
+    if (result == null) {
+      return;
+    }
+
+    if (!result) {
       _xCount++;
     } else {
       _oCount++;

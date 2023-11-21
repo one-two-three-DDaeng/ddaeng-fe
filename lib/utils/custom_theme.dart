@@ -19,7 +19,6 @@ ThemeData customTheme(BuildContext context) {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: CustomColor.mainColor,
-        fixedSize: const Size.fromHeight(54),
         padding: const EdgeInsets.only(
           left: 6,
           right: 6,
@@ -31,7 +30,7 @@ ThemeData customTheme(BuildContext context) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        elevation: 0,
+        shadowColor: Colors.black,
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(

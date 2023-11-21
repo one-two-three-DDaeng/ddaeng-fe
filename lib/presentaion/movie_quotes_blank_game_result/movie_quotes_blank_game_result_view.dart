@@ -117,6 +117,9 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size.fromHeight(50),
+                    ),
                     child: Text(
                       '다시하기',
                       style: customTextStyle(
@@ -153,6 +156,9 @@ class MovieQuotesBlankGameResultView extends StatelessWidget {
                 ),
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size.fromHeight(50),
+                    ),
                     child: Text(
                       '홈으로',
                       style: customTextStyle(

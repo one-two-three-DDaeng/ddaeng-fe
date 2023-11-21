@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:one_two_three_ddaeng_fe/utils/custom_color.dart';
 import 'package:one_two_three_ddaeng_fe/utils/custom_text.dart';
-import 'package:onboarding/onboarding.dart';
 
 class GameDescriptionView extends StatefulWidget {
   final String title;
@@ -34,260 +32,227 @@ class _GameDescriptionViewState extends State<GameDescriptionView> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ..._defaultHeader(width),
-          Expanded(
-            child: Onboarding(
-              pages: [
-                PageModel(
-                  widget: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: width / 5,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Text(
-                              '★Rule★',
+      body: OrientationBuilder(
+        builder: (context, orientation) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: orientation == Orientation.portrait ? 50 : 20,
+                  ),
+                  Text(
+                    '게임 설명',
+                    style: customTextStyle(
+                      fontSize: 36,
+                      color: CustomColor.mainColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: orientation == Orientation.portrait ? 40 : 10,
+                  ),
+                  orientation == Orientation.portrait
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Text(
+                                widget.title,
+                                style: customTextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Text(
+                                widget.subTitle,
+                                style: customTextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              widget.title,
                               style: customTextStyle(
-                                fontSize: 16,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ...List.generate(
-                          widget.ruleList.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
-                            child: Text(
-                              widget.ruleList[index],
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Text(
+                              widget.subTitle,
                               style: customTextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                                fontSize: 15,
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Expanded(
-                          child: Container(
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                    border: Border.all(
+                      width: 1,
+                      color: CustomColor.greyColor2,
                     ),
                   ),
-                ),
-                PageModel(
-                  widget: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: width / 4,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Text(
-                              '★게임 설명★',
-                              style: customTextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                  child: Scrollbar(
+                    thickness: 1,
+                    interactive: true,
+                    scrollbarOrientation: ScrollbarOrientation.right,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '★Rule★',
+                            style: customTextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ...List.generate(
+                            widget.ruleList.length,
+                            (index) => Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: Text(
+                                widget.ruleList[index],
+                                style: customTextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ...List.generate(
-                          widget.gameDescriptionList.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
-                            child: Text(
-                              '${index + 1}. ${widget.gameDescriptionList[index]}',
-                              style: customTextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            '★게임 설명★',
+                            style: customTextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ...List.generate(
+                            widget.gameDescriptionList.length,
+                            (index) => Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: Text(
+                                '${index + 1}. ${widget.gameDescriptionList[index]}',
+                                style: customTextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            color: Colors.white,
+                          const SizedBox(
+                            height: 16,
                           ),
-                        )
-                      ],
+                          Text(
+                            '★★★게임 더욱 즐기는 법★★★',
+                            style: customTextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ...List.generate(
+                            widget.moreEnjoyList.length,
+                            (index) => Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: Text(
+                                '${index + 1}. ${widget.moreEnjoyList[index]}',
+                                style: customTextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                PageModel(
-                  widget: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: width * 3 / 5,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Text(
-                              '★★★게임 더욱 즐기는 법★★★',
-                              style: customTextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ...List.generate(
-                          widget.moreEnjoyList.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
-                            child: Text(
-                              '${index + 1}. ${widget.moreEnjoyList[index]}',
-                              style: customTextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-              startPageIndex: 0,
-              onPageChange: (pageIndex) => {
-                currentIndex = pageIndex,
-              },
-              footerBuilder: (context, netDragDistance, pagesLength, setIndex) => Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 10,
-                  left: 30,
-                  right: 30,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: width / 3,
-                      child: CustomIndicator(
-                        netDragPercent: netDragDistance,
-                        indicator: Indicator(
-                          activeIndicator: const ActiveIndicator(
-                            color: Colors.grey,
-                            borderWidth: 1,
-                          ),
-                          closedIndicator: const ClosedIndicator(
-                            color: CustomColor.mainColor,
-                            borderWidth: 1,
-                          ),
-                          indicatorDesign: IndicatorDesign.polygon(
-                            polygonDesign: PolygonDesign(
-                              polygon: DesignType.polygon_circle,
-                              polygonSpacer: 30.0,
-                            ),
-                          ),
-                        ),
-                        pagesLength: pagesLength,
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(90, 30),
-                        backgroundColor: currentIndex == pagesLength - 1 ? CustomColor.mainColor : CustomColor.buttonBlackColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(
-                        currentIndex == pagesLength - 1 ? '알겠어요!' : '스킵',
-                        style: customTextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
                 ),
               ),
             ),
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(78, 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    '알겠어요!',
+                    style: customTextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 24,
+                )
+              ],
+            ),
+            SizedBox(
+              height: orientation == Orientation.portrait ? 40 : 20,
+            )
+          ],
+        ),
       ),
     );
   }
-
-  _defaultHeader(double width) => [
-        Center(
-          child: SizedBox(
-            width: width / 3,
-            child: FittedBox(
-              child: Text(
-                '게임 설명',
-                style: customTextStyle(
-                  fontSize: 36,
-                  color: CustomColor.mainColor,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-            widget.title,
-            style: customTextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-            widget.subTitle,
-            style: customTextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-      ];
 }
