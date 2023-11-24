@@ -1,4 +1,4 @@
-package com.example.one_two_three_ddaeng_fe
+package com.dk.ddaeng
 
 import io.flutter.embedding.android.FlutterActivity
 
